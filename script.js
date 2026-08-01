@@ -2,60 +2,26 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQM0FIlSJiAxcJx
 
 async function loadData() {
 
+    console.log("Старт");
+
     const tbody = document.getElementById("rating-body");
-    tbody.innerHTML = "<tr><td colspan='4'>Загрузка...</td></tr>";
 
     try {
 
+        console.log("Запрашиваем CSV...");
+
         const response = await fetch(CSV_URL);
+
+        console.log("Статус:", response.status);
+
         const text = await response.text();
 
-        const rows = text.trim().split(/\r?\n/).slice(1);
-
-        const employees = rows.map(row => {
-
-            const cols = row.split(",");
-
-            return {
-                name: cols[1].replace(/"/g, "").trim(),
-                points: Number(cols[2]) || 0,
-                last: (cols[3] || "—").replace(/"/g, "").trim()
-            };
-
-        });
-
-        employees.sort((a, b) => b.points - a.points);
-
-        tbody.innerHTML = "";
-
-        employees.forEach((employee, index) => {
-
-            const tr = document.createElement("tr");
-
-            if (index < 2) tr.classList.add("danger");
-
-            if (index >= employees.length - 2) tr.classList.add("good");
-
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${employee.name}</td>
-                <td>${employee.points}</td>
-                <td>${employee.last || "—"}</td>
-            `;
-
-            tbody.appendChild(tr);
-
-        });
+        console.log("CSV:");
+        console.log(text);
 
     } catch (error) {
 
-        console.error(error);
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="4">Ошибка загрузки данных</td>
-            </tr>
-        `;
+        console.error("Ошибка:", error);
 
     }
 
