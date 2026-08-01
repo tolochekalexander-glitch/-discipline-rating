@@ -2,35 +2,46 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQM0FIlSJiAxcJx
 
 async function loadData() {
 
+    const tbody = document.getElementById("rating-body");
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="4">Загрузка...</td>
+        </tr>
+    `;
+
     try {
 
         const response = await fetch(CSV_URL);
 
         if (!response.ok) {
-            throw new Error("Не удалось загрузить таблицу");
+            throw new Error("Ошибка загрузки");
         }
 
         const text = await response.text();
 
-        const rows = text.trim().split(/\r?\n/).slice(1);
+        const lines = text
+            .replace(/\r/g, "")
+            .trim()
+            .split("\n");
 
         const employees = [];
 
-        rows.forEach(row => {
+        for (let i = 1; i < lines.length; i++) {
 
-            const cols = row.split(",");
+            const cols = lines[i]
+                .split(",")
+                .map(item => item.replace(/^"|"$/g, "").trim());
 
             employees.push({
-                name: cols[1] ? cols[1].replace(/"/g, "") : "",
-                points: Number(cols[2]) || 0,
-                last: cols[3] ? cols[3].replace(/"/g, "") : "-"
+                name: cols[1] || "",
+                points: parseInt(cols[2]) || 0,
+                last: cols[3] || "-"
             });
 
-        });
+        }
 
         employees.sort((a, b) => b.points - a.points);
 
-        const tbody = document.getElementById("rating-body");
         tbody.innerHTML = "";
 
         employees.forEach((employee, index) => {
@@ -38,7 +49,6 @@ async function loadData() {
             const tr = document.createElement("tr");
 
             if (index < 2) tr.classList.add("danger");
-
             if (index >= employees.length - 2) tr.classList.add("good");
 
             tr.innerHTML = `
@@ -52,18 +62,17 @@ async function loadData() {
 
         });
 
-    } catch (error) {
+    } catch (e) {
 
-        console.error(error);
+        console.error(e);
 
-        document.getElementById("rating-body").innerHTML = `
+        tbody.innerHTML = `
             <tr>
                 <td colspan="4">
-                    Ошибка загрузки Google Таблицы
+                    Ошибка загрузки данных
                 </td>
             </tr>
         `;
-
     }
 
 }
