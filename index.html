@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дисциплинарный рейтинг</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Дисциплинарный рейтинг</h1>
+
+    <p class="subtitle">
+        Баллы начисляются за нарушения и снимаются за положительные действия.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Место</th>
+                <th>Сотрудник</th>
+                <th>Баллы</th>
+                <th>Последнее изменение</th>
+            </tr>
+        </thead>
+
+        <tbody id="rating-body">
+        </tbody>
+    </table>
+
+    <div class="rules">
+
+        <h2>Правила</h2>
+
+        <ul>
+            <li>Баллы могут начисляться и сниматься.</li>
+            <li>Рейтинг обновляется после внесения изменений.</li>
+            <li>По итогам недели два сотрудника с наибольшим количеством баллов принимают участие в дополнительной уборке.</li>
+        </ul>
+
+    </div>
+
+    <div class="rules">
+
+        <h2>🟥 Штрафные баллы</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Причина</th>
+                    <th>Баллы</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr><td>Использование телефона</td><td>+2</td></tr>
+                <tr><td>Опоздание</td><td>+2</td></tr>
+                <tr><td>Отсутствие бейджа</td><td>+1</td></tr>
+                <tr><td>Нарушение внешнего вида</td><td>+1</td></tr>
+                <tr><td>Неубранное рабочее место</td><td>+2</td></tr>
+                <tr><td>Нарушение стандартов обслуживания</td><td>+2</td></tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="rules">
+
+        <h2>🟩 Поощрительные баллы</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Причина</th>
+                    <th>Баллы</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr><td>Отличная смена</td><td>-1</td></tr>
+                <tr><td>Помощь коллеге</td><td>-1</td></tr>
+                <tr><td>Инициатива</td><td>-1</td></tr>
+                <tr><td>Благодарность от гостя</td><td>-2</td></tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="rules">
+
+        <strong>Последнее обновление:</strong>
+        <span id="last-update">сегодня</span>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
