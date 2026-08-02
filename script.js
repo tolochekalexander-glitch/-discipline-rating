@@ -3,7 +3,6 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQM0FIlSJiAxcJx
 async function loadData() {
 
     const tbody = document.getElementById("rating-body");
-
     tbody.innerHTML = "<tr><td colspan='4'>Загрузка...</td></tr>";
 
     try {
@@ -19,9 +18,9 @@ async function loadData() {
                 const cols = row.split(",");
 
                 return {
-                    name: (cols[0] || "").trim(),
-                    points: Number(cols[1]) || 0,
-                    last: (cols[2] || "—").trim()
+                    name: (cols[1] || "").trim(),
+                    points: Number(cols[2]) || 0,
+                    last: (cols[3] || "—").trim()
                 };
 
             })
@@ -36,14 +35,13 @@ async function loadData() {
             const tr = document.createElement("tr");
 
             if (index < 2) tr.classList.add("danger");
-
             if (index >= employees.length - 2) tr.classList.add("good");
 
             tr.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${employee.name}</td>
                 <td>${employee.points}</td>
-                <td>${employee.last || "—"}</td>
+                <td>${employee.last}</td>
             `;
 
             tbody.appendChild(tr);
@@ -59,9 +57,7 @@ async function loadData() {
                 <td colspan="4">Ошибка загрузки данных</td>
             </tr>
         `;
-
     }
-
 }
 
 loadData();
