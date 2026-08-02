@@ -19,9 +19,9 @@ async function loadData() {
                 const cols = row.split(",");
 
                 return {
-                    name: (cols[1] || "").trim(),
-                    points: Number(cols[2]) || 0,
-                    last: (cols[3] || "—").trim()
+                    name: (cols[0] || "").trim(),
+                    points: Number(cols[1]) || 0,
+                    last: (cols[2] || "—").trim()
                 };
 
             })
@@ -43,7 +43,7 @@ async function loadData() {
                 <td>${index + 1}</td>
                 <td>${employee.name}</td>
                 <td>${employee.points}</td>
-                <td>${employee.last}</td>
+                <td>${employee.last || "—"}</td>
             `;
 
             tbody.appendChild(tr);
