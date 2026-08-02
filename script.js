@@ -3,28 +3,35 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQM0FIlSJiAxcJx
 async function loadData() {
 
     const tbody = document.getElementById("rating-body");
+
     tbody.innerHTML = "<tr><td colspan='4'>Загрузка...</td></tr>";
 
     try {
 
-        const response = await fetch(CSV_URL);
+        const response = await fetch(CSV_URL + "&t=" + Date.now());
+
+        if (!response.ok) {
+            throw new Error("Ошибка загрузки CSV");
+        }
+
         const text = await response.text();
 
         const rows = text.trim().split(/\r?\n/).slice(1);
 
-        const employees = rows
-            .map(row => {
+        const employees = rows.map(row => {
 
-                const cols = row.split(",");
+            const cols = row.split(",");
 
-                return {
-                    name: (cols[1] || "").trim(),
-                    points: Number(cols[2]) || 0,
-                    last: (cols[3] || "—").trim()
-                };
+            // Если первый столбец пустой — пропускаем его
+            const shift = cols[0] === "" ? 1 : 0;
 
-            })
-            .filter(employee => employee.name !== "");
+            return {
+                name: (cols[0 + shift] || "").trim(),
+                points: parseInt(cols[1 + shift]) || 0,
+                last: (cols[2 + shift] || "—").trim()
+            };
+
+        }).filter(e => e.name !== "");
 
         employees.sort((a, b) => b.points - a.points);
 
@@ -57,7 +64,9 @@ async function loadData() {
                 <td colspan="4">Ошибка загрузки данных</td>
             </tr>
         `;
+
     }
+
 }
 
 loadData();
