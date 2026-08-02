@@ -4,28 +4,34 @@ async function loadData() {
 
     const tbody = document.getElementById("rating-body");
 
+    console.log("tbody =", tbody);
+
     tbody.innerHTML = "<tr><td colspan='4'>Загрузка...</td></tr>";
 
     try {
 
         const response = await fetch(CSV_URL);
+        console.log("status =", response.status);
+
         const text = await response.text();
+        console.log("text =", text);
 
         const rows = text.trim().split(/\r?\n/).slice(1);
+        console.log("rows =", rows.length);
 
-        const employees = rows
-            .map(row => {
+        const employees = rows.map(row => {
 
-                const cols = row.split(",");
+            const cols = row.split(",");
 
-                return {
-                    name: (cols[1] || "").trim(),
-                    points: Number(cols[2]) || 0,
-                    last: (cols[3] || "—").trim()
-                };
+            return {
+                name: (cols[1] || "").trim(),
+                points: Number(cols[2]) || 0,
+                last: (cols[3] || "—").trim()
+            };
 
-            })
-            .filter(employee => employee.name !== "");
+        }).filter(e => e.name !== "");
+
+        console.log("employees =", employees);
 
         employees.sort((a, b) => b.points - a.points);
 
@@ -33,10 +39,11 @@ async function loadData() {
 
         employees.forEach((employee, index) => {
 
+            console.log("Добавляем", employee.name);
+
             const tr = document.createElement("tr");
 
             if (index < 2) tr.classList.add("danger");
-
             if (index >= employees.length - 2) tr.classList.add("good");
 
             tr.innerHTML = `
@@ -50,15 +57,11 @@ async function loadData() {
 
         });
 
+        console.log("ГОТОВО");
+
     } catch (error) {
 
-        console.error(error);
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="4">Ошибка загрузки данных</td>
-            </tr>
-        `;
+        console.error("Ошибка:", error);
 
     }
 
