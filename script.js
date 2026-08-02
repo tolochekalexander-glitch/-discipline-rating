@@ -22,7 +22,6 @@ async function loadData() {
 
             const cols = row.split(",");
 
-            // Если первый столбец пустой — пропускаем его
             const shift = cols[0] === "" ? 1 : 0;
 
             return {
@@ -31,7 +30,7 @@ async function loadData() {
                 last: (cols[2 + shift] || "—").trim()
             };
 
-        }).filter(e => e.name !== "");
+        }).filter(employee => employee.name !== "");
 
         employees.sort((a, b) => b.points - a.points);
 
@@ -41,8 +40,15 @@ async function loadData() {
 
             const tr = document.createElement("tr");
 
-            if (index < 2) tr.classList.add("danger");
-            if (index >= employees.length - 2) tr.classList.add("good");
+            // Два худших сотрудника
+            if (index < 2) {
+                tr.classList.add("danger");
+            }
+
+            // Лучший сотрудник
+            if (index === employees.length - 1) {
+                tr.classList.add("good");
+            }
 
             tr.innerHTML = `
                 <td>${index + 1}</td>
